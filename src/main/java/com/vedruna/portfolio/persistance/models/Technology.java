@@ -26,9 +26,6 @@ public class Technology {
 
     //Relación muchos a muchos con projects
     @ManyToMany(mappedBy = "technologies")
-    private List<Project> projects;
-
-    //Esta entidad representa una tecnología que puede utilizarse en muchos proyectos
-    
+    private List<Project> projects;    
 
 }

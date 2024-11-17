@@ -36,10 +36,11 @@ public class Developer {
     @Column(name = "github_url", length = 255, unique = true)
     private String githubUrl;
 
+    //Entidad que presenta a un desarrollador que puede estar asociado a varios proyectos
     //Relación Muchos a Muchos con Projects
     @ManyToMany(mappedBy = "developers")
     private List<Project> projects;
 
-    //Entidad que presenta a un desarrollador que puede estar asociado a varios proyectos
+   
     
 }
