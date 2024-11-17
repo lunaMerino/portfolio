@@ -3,20 +3,17 @@ package com.vedruna.portfolio.services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.vedruna.portfolio.persistance.models.Project;
+import com.vedruna.portfolio.dto.ProjectDTO;
+
 public interface ProjectServiceI {
-    //obtener todos los proyectos
-    Page<Project> showAllProjects(Pageable pageable);
 
-    //buscar proyecto por nombre
-    Page<Project> showProjectsByName(String projectName, Pageable pageable);
+    Page<ProjectDTO> showAllProjects(Pageable pageable);
 
-    //guardar proyecto nuevo
-    void saveProject(Project project);
+    Page<ProjectDTO> showProjectsByName(String projectName, Pageable pageable);
 
-    //editar proyecto
-    void updateProject(Integer id, Project project);
+    void saveProject(ProjectDTO projectDTO);
 
-    //eliminar proyecto
+    void updateProject(Integer id, ProjectDTO projectDTO);
+
     void deleteProject(Integer id);
 }

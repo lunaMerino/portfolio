@@ -17,9 +17,8 @@ public class Status {
     @Column(name = "statusId")
     private int statusId;
     
+    //Relación Uno a Muchos con Project
     @Column(name = "status_name", nullable = false, unique = true, length = 20)
     private String statusName;
-
-    //Esta columna representa el estado de un proyecto (Development, testing...)
 
 }

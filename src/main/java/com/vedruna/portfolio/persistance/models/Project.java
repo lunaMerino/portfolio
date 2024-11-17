@@ -35,8 +35,8 @@ public class Project {
     @Column(name = "start_date")
     private Date startDate;
 
-    @Column(name = "end_date")
-    private Date endDate;
+    @Column(name = "end_date")  
+    private Date endDate; 
 
     @Column(name = "repository_url", length = 255)
     private String repositoryUrl;
