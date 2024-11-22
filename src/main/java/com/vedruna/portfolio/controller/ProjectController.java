@@ -5,8 +5,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +18,7 @@ import com.vedruna.portfolio.dto.ProjectDTO;
 import com.vedruna.portfolio.services.ProjectServiceI;
 
 @RestController
-@RequestMapping("/projects")
+@RequestMapping("/api/v1/projects")
 public class ProjectController {
 
     @Autowired
@@ -37,9 +39,11 @@ public class ProjectController {
     }
 
     //insertar un nuevo proyecto
+    @PostMapping
     public ResponseEntity<Void> createProject(@RequestBody ProjectDTO projectDTO) {
         projectService.saveProject(projectDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build(); // Código 201
+    
     }
 
     //editar un proyecto existente
@@ -50,6 +54,7 @@ public class ProjectController {
     }
 
     //eliminar un proyecto
+    @DeleteMapping("/projects/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Integer id) {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build(); // Código 204
