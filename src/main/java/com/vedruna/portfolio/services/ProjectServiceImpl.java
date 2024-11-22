@@ -2,13 +2,20 @@
 
 package com.vedruna.portfolio.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.vedruna.portfolio.dto.DeveloperDTO;
 import com.vedruna.portfolio.dto.ProjectDTO;
+import com.vedruna.portfolio.persistance.models.Developer;
 import com.vedruna.portfolio.persistance.models.Project;
+import com.vedruna.portfolio.persistance.models.Status;
+import com.vedruna.portfolio.persistance.models.Technology;
 import com.vedruna.portfolio.persistance.repository.ProjectRepository;
 
 
@@ -40,6 +47,39 @@ public class ProjectServiceImpl implements ProjectServiceI {
         project.setRepositoryUrl(projectDTO.getRepositoryUrl());
         project.setDemoUrl(projectDTO.getDemoUrl());
         project.setPicture(projectDTO.getPicture());
+
+       // Crear el Status manualmente y asignarlo al proyecto
+        Status status = new Status();
+        status.setStatusName(projectDTO.getStatusName());
+        project.setStatus(status);
+
+
+        // Procesar los desarrolladores
+        List<Developer> developers = new ArrayList<>();
+        for (DeveloperDTO developerDTO : projectDTO.getDevelopers()) {
+            Developer developer = new Developer();
+            developer.setDevId(developerDTO.getDevId());
+            developer.setDevName(developerDTO.getDevName());
+            developer.setDevSurname(developerDTO.getDevSurname());
+            developer.setEmail(developerDTO.getEmail());
+            developer.setLinkedinUrl(developerDTO.getLinkedinUrl());
+            developer.setGithubUrl(developerDTO.getGithubUrl());
+            developers.add(developer);
+        }
+        project.setDevelopers(developers);
+
+        List<Technology> technologies = new ArrayList<>();
+        for (String techName : projectDTO.getTechnologies()) {
+            // Crear una nueva instancia de Technology
+            Technology technology = new Technology();
+            technology.setTechName(techName);
+            technologies.add(technology);
+        }
+
+        // Asignar las tecnologías al proyecto
+        project.setTechnologies(technologies);
+
+
 
         projectRepo.save(project);
     }

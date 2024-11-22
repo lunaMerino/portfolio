@@ -1,6 +1,8 @@
 package com.vedruna.portfolio.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,12 +21,14 @@ public class TechnologyController {
     private TechnologyServiceI technologyService;
 
     @PostMapping
-    public void createTechnology(@RequestBody TechnologyDTO technologyDTO) {
+    public ResponseEntity<Void> createTechnology(@RequestBody TechnologyDTO technologyDTO) {
         technologyService.insertTechnology(technologyDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTechnology(@PathVariable int id) {
+    public ResponseEntity<Void> deleteTechnology(@PathVariable int id) {
         technologyService.deleteTechnology(id);
+        return ResponseEntity.noContent().build();
     }
 }
