@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class TechnologyDTO {
-    private int techId;
+    private Integer techId;
     private String techName;
 
     public TechnologyDTO(Technology technology) {
