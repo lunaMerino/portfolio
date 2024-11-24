@@ -64,7 +64,7 @@ public class ProjectServiceImpl implements ProjectServiceI {
         project.setPicture(projectDTO.getPicture());
 
        // verifica si el status existe
-       Status status = statusRepo.findById(projectDTO.getStatusId())
+        Status status = statusRepo.findById(projectDTO.getStatusId())
            .orElseThrow(() -> new RuntimeException("Status not found"));
         project.setStatus(status);
 
@@ -118,14 +118,16 @@ public class ProjectServiceImpl implements ProjectServiceI {
             throw new RuntimeException("Proyecto no encontrado");
         }
 
-        Project project = projectRepo.findById(id).get();
-        project.setProjectName(projectDTO.getProjectName());
-        project.setDescription(projectDTO.getDescription());
-        project.setStartDate(projectDTO.getStartDate());
-        project.setEndDate(projectDTO.getEndDate());
-        project.setRepositoryUrl(projectDTO.getRepositoryUrl());
-        project.setDemoUrl(projectDTO.getDemoUrl());
-        project.setPicture(projectDTO.getPicture());
+        
+
+            Project project = projectRepo.findById(id).get();
+            project.setProjectName(projectDTO.getProjectName());
+            project.setDescription(projectDTO.getDescription());
+            project.setStartDate(projectDTO.getStartDate());
+            project.setEndDate(projectDTO.getEndDate());
+            project.setRepositoryUrl(projectDTO.getRepositoryUrl());
+            project.setDemoUrl(projectDTO.getDemoUrl());
+            project.setPicture(projectDTO.getPicture());
 
             Status status = statusRepo.findById(projectDTO.getStatusId())
                     .orElseThrow(() -> new RuntimeException("Status no encontrado"));
