@@ -12,11 +12,16 @@ import org.springframework.stereotype.Service;
 
 import com.vedruna.portfolio.dto.DeveloperDTO;
 import com.vedruna.portfolio.dto.ProjectDTO;
+import com.vedruna.portfolio.dto.TechnologyDTO;
 import com.vedruna.portfolio.persistance.models.Developer;
 import com.vedruna.portfolio.persistance.models.Project;
 import com.vedruna.portfolio.persistance.models.Status;
 import com.vedruna.portfolio.persistance.models.Technology;
+import com.vedruna.portfolio.persistance.repository.DeveloperRepository;
 import com.vedruna.portfolio.persistance.repository.ProjectRepository;
+import com.vedruna.portfolio.persistance.repository.StatusRepository;
+import com.vedruna.portfolio.persistance.repository.TechnologyRepository;
+
 
 
 @Service
@@ -24,6 +29,16 @@ public class ProjectServiceImpl implements ProjectServiceI {
 
     @Autowired
     private ProjectRepository projectRepo;
+
+    @Autowired
+    private StatusRepository statusRepo;
+
+    @Autowired
+    private TechnologyRepository technologyRepo;
+
+    @Autowired
+    private DeveloperRepository developerRepo;
+
 
     @Override
     public Page<ProjectDTO> showAllProjects(Pageable pageable) {
@@ -48,9 +63,9 @@ public class ProjectServiceImpl implements ProjectServiceI {
         project.setDemoUrl(projectDTO.getDemoUrl());
         project.setPicture(projectDTO.getPicture());
 
-       // Crear el Status manualmente y asignarlo al proyecto
-        Status status = new Status();
-        status.setStatusName(projectDTO.getStatusName());
+       // verifica si el status existe
+       Status status = statusRepo.findById(projectDTO.getStatusId())
+           .orElseThrow(() -> new RuntimeException("Status not found"));
         project.setStatus(status);
 
 
@@ -69,15 +84,27 @@ public class ProjectServiceImpl implements ProjectServiceI {
         project.setDevelopers(developers);
 
         List<Technology> technologies = new ArrayList<>();
-        for (String techName : projectDTO.getTechnologies()) {
-            // Crear una nueva instancia de Technology
-            Technology technology = new Technology();
-            technology.setTechName(techName);
+        for (TechnologyDTO techDTO : projectDTO.getTechnologies()) {
+            Technology technology;
+            
+            if (techDTO.getTechId() != null) {
+                // busca x id
+                technology = technologyRepo.findById(techDTO.getTechId())
+                    .orElseThrow(() -> new RuntimeException("Technology no encontrada con ID: " + techDTO.getTechId()));
+            } else {
+                // x nombre si no hay ID, o crear una nueva
+                technology = technologyRepo.findByTechName(techDTO.getTechName()).stream().findFirst()
+                    .orElseGet(() -> {
+                        Technology newTech = new Technology();
+                        newTech.setTechName(techDTO.getTechName());
+                        return technologyRepo.save(newTech);
+                    });
+            }
+            
             technologies.add(technology);
         }
-
-        // Asignar las tecnologías al proyecto
         project.setTechnologies(technologies);
+
 
 
 
@@ -99,6 +126,46 @@ public class ProjectServiceImpl implements ProjectServiceI {
         project.setRepositoryUrl(projectDTO.getRepositoryUrl());
         project.setDemoUrl(projectDTO.getDemoUrl());
         project.setPicture(projectDTO.getPicture());
+
+            Status status = statusRepo.findById(projectDTO.getStatusId())
+                    .orElseThrow(() -> new RuntimeException("Status no encontrado"));
+            project.setStatus(status);
+        
+
+            List<Developer> developers = new ArrayList<>();
+            for (DeveloperDTO developerDTO : projectDTO.getDevelopers()) {
+                Developer developer = developerRepo.findById(developerDTO.getDevId())  // Aquí se asume que DeveloperDTO tiene un método getDevId()
+                    .orElseThrow(() -> new RuntimeException("Developer no encontrado"));
+                developers.add(developer);
+            }
+            project.setDevelopers(developers);
+
+            List<Technology> technologies = new ArrayList<>();
+            for (TechnologyDTO technologyDTO : projectDTO.getTechnologies()) {
+                Technology technology;
+                if (technologyDTO.getTechId() != null) {
+                    technology = technologyRepo.findById(technologyDTO.getTechId())
+                        .orElseThrow(() -> new RuntimeException("Technology no encontrada con ID: " + technologyDTO.getTechId()));
+                } 
+                else if (technologyDTO.getTechName() != null && !technologyDTO.getTechName().isEmpty()) {
+                    technology = technologyRepo.findByTechName(technologyDTO.getTechName()).stream().findFirst()
+                        .orElseGet(() -> {
+                            Technology newTech = new Technology();
+                            newTech.setTechName(technologyDTO.getTechName());
+                            return technologyRepo.save(newTech);
+                        });
+                } 
+                else {
+                    throw new RuntimeException("Debe proporcionar al menos el ID o el nombre de la tecnología");
+                }
+
+                technologies.add(technology);
+            }
+            project.setTechnologies(technologies);
+
+
+
+
         projectRepo.save(project);
     }
 
