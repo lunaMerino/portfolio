@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vedruna.portfolio.dto.TechnologyDTO;
+import com.vedruna.portfolio.persistance.models.Project;
 import com.vedruna.portfolio.persistance.models.Technology;
+import com.vedruna.portfolio.persistance.repository.ProjectRepository;
 import com.vedruna.portfolio.persistance.repository.TechnologyRepository;
 
 @Service
@@ -12,6 +14,9 @@ public class TechnologyServiceImpl implements TechnologyServiceI {
 
     @Autowired
     private TechnologyRepository technologyRepo;
+
+    @Autowired
+    private ProjectRepository projectRepo;
 
     @Override
     public void insertTechnology(TechnologyDTO technologyDTO) {
@@ -28,7 +33,15 @@ public class TechnologyServiceImpl implements TechnologyServiceI {
         if (!technologyRepo.existsById(techId)) {
             throw new RuntimeException("Tecnología no encontrada");
         }
+        Technology technology = technologyRepo.findById(techId)
+            .orElseThrow(() -> new RuntimeException("Technology not found"));
 
-        technologyRepo.deleteById(techId);
+        for (Project project : technology.getProjects()) {
+
+            project.getTechnologies().remove(technology);
+        }
+        projectRepo.saveAll(technology.getProjects());
+
+        technologyRepo.delete(technology);
     }
 }
