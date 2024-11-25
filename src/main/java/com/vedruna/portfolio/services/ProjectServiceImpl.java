@@ -44,15 +44,14 @@ public class ProjectServiceImpl implements ProjectServiceI {
     @Override
     public Page<ProjectDTO> showAllProjects(Pageable pageable) {
         //obtiene los proyectos paginados y los convierte a DTO
-         Pageable pageableWithSize = PageRequest.of(pageable.getPageNumber(), 3); // CAMBIO
-    // Aplicar la paginación de 3 elementos por página
-        return projectRepo.findAll(pageableWithSize).map(project -> new ProjectDTO(project)); // CAMBIO
+         Pageable pageableWithSize = PageRequest.of(pageable.getPageNumber(), 3);
+        return projectRepo.findAll(pageableWithSize).map(project -> new ProjectDTO(project));
     }
 
     @Override
     public Page<ProjectDTO> showProjectsByName(String projectName, Pageable pageable) {
-        Pageable pageableWithSize = PageRequest.of(pageable.getPageNumber(), 3); // CAMBIO
-    // Aplicar la paginación de 3 elementos por página
+        Pageable pageableWithSize = PageRequest.of(pageable.getPageNumber(), 3);
+
         return projectRepo.findByProjectNameContainingIgnoreCase(projectName, pageableWithSize).map(project -> new ProjectDTO(project)); // CAMBIO
     }
 

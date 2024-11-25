@@ -27,7 +27,7 @@ public class TechnologyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTechnology(@PathVariable int id) {
+    public ResponseEntity<Void> deleteTechnology(@PathVariable Integer id) {
         technologyService.deleteTechnology(id);
         return ResponseEntity.noContent().build();
     }
