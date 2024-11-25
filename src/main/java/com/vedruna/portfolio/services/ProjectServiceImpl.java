@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -43,12 +44,16 @@ public class ProjectServiceImpl implements ProjectServiceI {
     @Override
     public Page<ProjectDTO> showAllProjects(Pageable pageable) {
         //obtiene los proyectos paginados y los convierte a DTO
-        return projectRepo.findAll(pageable).map(project -> new ProjectDTO(project));
+         Pageable pageableWithSize = PageRequest.of(pageable.getPageNumber(), 3); // CAMBIO
+    // Aplicar la paginación de 3 elementos por página
+        return projectRepo.findAll(pageableWithSize).map(project -> new ProjectDTO(project)); // CAMBIO
     }
 
     @Override
     public Page<ProjectDTO> showProjectsByName(String projectName, Pageable pageable) {
-        return projectRepo.findByProjectNameContainingIgnoreCase(projectName, pageable).map(project -> new ProjectDTO(project));
+        Pageable pageableWithSize = PageRequest.of(pageable.getPageNumber(), 3); // CAMBIO
+    // Aplicar la paginación de 3 elementos por página
+        return projectRepo.findByProjectNameContainingIgnoreCase(projectName, pageableWithSize).map(project -> new ProjectDTO(project)); // CAMBIO
     }
 
     @Override

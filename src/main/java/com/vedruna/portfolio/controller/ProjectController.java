@@ -2,6 +2,7 @@ package com.vedruna.portfolio.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vedruna.portfolio.dto.ProjectDTO;
@@ -26,14 +28,21 @@ public class ProjectController {
 
     //obtener todos los proyectos paginados
     @GetMapping
-    public ResponseEntity<Page<ProjectDTO>> getAllProjects(Pageable pageable) {
+    public ResponseEntity<Page<ProjectDTO>> getAllProjects(
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        @RequestParam(value = "size", defaultValue = "3") int size) {  // CAMBIO: Se establece el tamaño de la página a 3
+        Pageable pageable = PageRequest.of(page, size);
         Page<ProjectDTO> projects = projectService.showAllProjects(pageable);
         return ResponseEntity.ok(projects); // Código 200
     }
 
     //obtener proyectos por palabra
     @GetMapping("/{word}")
-    public ResponseEntity<Page<ProjectDTO>> getProjectsByName(@PathVariable String word, Pageable pageable) {
+    public ResponseEntity<Page<ProjectDTO>> getProjectsByName(
+        @PathVariable String word,
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        @RequestParam(value = "size", defaultValue = "3") int size) { // CAMBIO: Se establece el tamaño de la página a 3
+        Pageable pageable = PageRequest.of(page, size);
         Page<ProjectDTO> projects = projectService.showProjectsByName(word, pageable);
         return ResponseEntity.ok(projects); // Código 200
     }
