@@ -14,7 +14,7 @@ import com.vedruna.portfolio.dto.DeveloperDTO;
 import com.vedruna.portfolio.services.DeveloperServiceI;
 
 @RestController
-@RequestMapping("/developers")
+@RequestMapping("/api/v1/developers")
 public class DeveloperController {
 
     @Autowired
@@ -31,4 +31,5 @@ public class DeveloperController {
         developerService.deleteDeveloper(id);
         return ResponseEntity.noContent().build(); // Código 204
     }
+
 }

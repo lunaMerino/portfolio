@@ -14,7 +14,7 @@ import com.vedruna.portfolio.dto.TechnologyDTO;
 import com.vedruna.portfolio.services.TechnologyServiceI;
 
 @RestController
-@RequestMapping("/technologies")
+@RequestMapping("/api/v1/technologies")
 public class TechnologyController {
 
     @Autowired

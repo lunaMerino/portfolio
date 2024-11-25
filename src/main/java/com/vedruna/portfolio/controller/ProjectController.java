@@ -54,7 +54,7 @@ public class ProjectController {
     }
 
     //eliminar un proyecto
-    @DeleteMapping("/projects/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Integer id) {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build(); // Código 204

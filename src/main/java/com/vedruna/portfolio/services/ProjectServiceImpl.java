@@ -118,7 +118,9 @@ public class ProjectServiceImpl implements ProjectServiceI {
             throw new RuntimeException("Proyecto no encontrado");
         }
 
-        
+        if (projectDTO.getProjectName() == null || projectDTO.getProjectName().trim().isEmpty()) {
+            throw new RuntimeException("El nombre del proyecto es obligatorio");
+        }
 
             Project project = projectRepo.findById(id).get();
             project.setProjectName(projectDTO.getProjectName());
