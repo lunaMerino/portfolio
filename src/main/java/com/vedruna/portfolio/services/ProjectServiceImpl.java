@@ -57,6 +57,9 @@ public class ProjectServiceImpl implements ProjectServiceI {
 
     @Override
     public void saveProject(ProjectDTO projectDTO) {
+        if (projectDTO.getProjectName() == null || projectDTO.getProjectName().trim().isEmpty()) { 
+            throw new RuntimeException("El nombre del proyecto es obligatorio");
+        }
         //convierte DTO a entidad Project
         Project project = new Project();
         project.setProjectName(projectDTO.getProjectName());
@@ -117,6 +120,9 @@ public class ProjectServiceImpl implements ProjectServiceI {
 
     @Override
     public void updateProject(Integer id, ProjectDTO projectDTO) {
+        if (projectDTO.getProjectName() == null || projectDTO.getProjectName().trim().isEmpty()) { // CAMBIO A
+            throw new RuntimeException("El nombre del proyecto es obligatorio"); // CAMBIO A
+        }
         //verifica si existe
         if (!projectRepo.existsById(id)) {
             throw new RuntimeException("Proyecto no encontrado");
